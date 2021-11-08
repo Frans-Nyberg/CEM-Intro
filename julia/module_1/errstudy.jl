@@ -7,7 +7,7 @@ Ms::AbstractArray
     errM = fill([], length(Ms))
     for (i, M) in enumerate(Ms)
         err_norms = zeros(length(norms))
-        for _ in 1:length(norms)
+        for _ in 1:S
             d1 = maker(M);
             d2 = maker(M);
             outp = op(d1, d2)
@@ -15,10 +15,10 @@ Ms::AbstractArray
             d2_round = op_round(d2);
             outp_round = op(d1_round, d2_round)
             for (j, norm) in enumerate(norms)
-                err_norms[j] = norm(outp_round-outp)/S
+                err_norms[j] += norm(outp_round-outp)
             end
         end
-        errM[i] = err_norms
+        errM[i] = err_norms/S
     end
     # transpose and convert to matrix
     return hcat(errM...)

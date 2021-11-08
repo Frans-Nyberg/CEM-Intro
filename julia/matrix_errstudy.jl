@@ -3,7 +3,7 @@ import .ErrStudy: find_rounderr, time_op
 import LinearAlgebra: norm
 using Plots
 
-savedir = string(pwd(), "/results_1")
+savedir = joinpath(pwd(), "results_1")
 
 make_mat(M) = rand(Float64, M, M)
 matmul(A, B) = A*B
@@ -43,7 +43,7 @@ println("doing tests")
 test_matmul()
 println("finding rounding error")
 errs = find_matmul_rounderr()
-println("finding time complexity (takes a minute")
+println("finding time complexity (takes a minute)")
 times = time_matmul()
 
 ## Plot matmul
@@ -57,7 +57,7 @@ plot!(Ms, cmplxn(2, errs[1,end]), linestyle=:dash,
 plot!(Ms, cmplxn(1, errs[2,end]), linestyle=:dash,
     label="O(n^1)", marker=:star4)
 xaxis!(p1, "rows or columns")
-savefig(p1, string(savedir, "/rounderr_matmul.png"))
+savefig(p1, joinpath(savedir, "rounderr_matmul.png"))
 
 ## Plot time
 p2 = plot(Ms, times, label="time [s]",
@@ -68,6 +68,6 @@ plot!(Ms, cmplxn(2, times[end]), label="O(n^2)",
 plot!(Ms, cmplxn(3, times[end]), label="O(n^3)",
     marker=:star6)
 xaxis!(p2, "rows of columns")
-savefig(p2, string(savedir, "/time_matmul.png"))
+savefig(p2, joinpath(savedir, "time_matmul.png"))
 
 println(string("done! saved in ", savedir))
