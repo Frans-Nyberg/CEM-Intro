@@ -1,6 +1,6 @@
 include("module_1/errstudy.jl")
 import .ErrStudy: find_rounderr, time_op
-import LinearAlgebra: norm
+import LinearAlgebra: norm, opnorm
 using Plots
 
 savedir = joinpath(pwd(), "results_1")
@@ -17,7 +17,7 @@ function find_matmul_rounderr() :: Matrix
     S = 10
     norms = [
         A -> norm(A, 2),     # Frobenius norm
-        A -> norm(A, Inf)   # Max norm
+        A -> opnorm(A, Inf)    # Inf norm (defined for operators)
     ]
     return find_rounderr(matmul, make_mat,
         mat_round, norms, S, Ms)
@@ -37,26 +37,31 @@ function test_matmul()
     @assert(IA[2,1] == A[2,1])
 end
 
-## Run
+## Run round-off error study
 
 println("doing tests")
 test_matmul()
 println("finding rounding error")
 errs = find_matmul_rounderr()
+
+## Run time study
+
 println("finding time complexity (takes a minute)")
 times = time_matmul()
 
-## Plot matmul
+## Plot round-off
 p1 = plot(Ms, errs[1,:], xaxis=:log,
     yaxis=:log, label="Frobenius-norm",
     legend=:topleft, marker=:circle)
 plot!(Ms, errs[2,:], xaxis=:log,
-    yaxis=:log, label="max-norm", marker=:x)
+    yaxis=:log, label="inf-norm", marker=:x)
 plot!(Ms, cmplxn(2, errs[1,end]), linestyle=:dash,
     label="O(n^2)", marker=:star5)
 plot!(Ms, cmplxn(1, errs[2,end]), linestyle=:dash,
     label="O(n^1)", marker=:star4)
 xaxis!(p1, "rows or columns")
+
+##
 savefig(p1, joinpath(savedir, "rounderr_matmul.png"))
 
 ## Plot time
@@ -68,6 +73,8 @@ plot!(Ms, cmplxn(2, times[end]), label="O(n^2)",
 plot!(Ms, cmplxn(3, times[end]), label="O(n^3)",
     marker=:star6)
 xaxis!(p2, "rows of columns")
+
+##
 savefig(p2, joinpath(savedir, "time_matmul.png"))
 
 println(string("done! saved in ", savedir))
