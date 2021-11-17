@@ -74,7 +74,7 @@ sim.run(until=200)
 f_geom2 = plt.figure(dpi=150)
 sim.plot2D(ax = f_geom2.gca(), fields=mp.Ez)
 # Save figure
-f_geom2.savefig(savedir / 'bent_wavegude.png', format='png')
+f_geom2.savefig(savedir / 'bent_waveguide.png', format='png')
 
 # Generate a x-t slice plot instead
 vals = []
