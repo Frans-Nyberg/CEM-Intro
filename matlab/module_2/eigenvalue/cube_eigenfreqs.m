@@ -2,14 +2,18 @@ Nt = 8192; % Number of time steps
 %Lx = .05; Ly = .04; Lz = .03; % Cavity dimensions in meters
 %Nx = 25; Ny = 20; Nz = 15; % Number of cells along each axis
 L = 0.05; % Cavity dimensions in meters
-N = 37; % Number of cells along each axis
+Nh = 37; % Number of cells along each axis
+c0 = 299792458; % Speed of light in vacuum
 
 %% Run and sample
 %[Et, Dt, c0] = Wave3D(Nt, Lx, Ly, Lz, Nx, Ny, Nz);
-s1 = round(N*pi/10);
-s2 = round(N*sqrt(3)/10);
-s3 = round(N*7/11);
-[Et, Dt, c0] = Wave3D(Nt, L, L, L, N, N, N, s1,s2,s3);
+r1 = 1/7; r2 = sqrt(5)/5; r3 = 8/11;
+s1 = round(Nh*r1);
+s2 = round(Nh*r2);
+s3 = round(Nh*r3);
+dt = L/Nh/(c0*sqrt(3));
+%%
+[Et, Dt] = Wave3D(Nt, L, L, L, Nh, Nh, Nh, s1,s2,s3,dt);
 
 %%
 t1 = Nt * Dt;
@@ -26,13 +30,18 @@ amplitude = abs(spectr);
 plot(omega(2:Nmax), amplitude(2:Nmax,:))
 xlabel("omega [rad/s]")
 ylabel("amplitude")
+legend("Ex","Ey","Ez", 'Autoupdate', 'off')
+side = linspace(-1/2, 1/2, Nh);
+title(sprintf("at (%.4f, %.4f, %.4f)L", side(s1), side(s2), side(s3)))
 
 %% Analytical reference
-M = 3;  N = 4;  P = 4;
+M = 4;  N = 4;  P = 5;
 an_modes = 0.5*c0/L * sqrt(sum(make_trips(M,N,P).^2,2));
 hold on
 for k=1:length(an_modes)
-    xline(2*pi*an_modes(k));
+    if 2*pi*an_modes(k) <= omega(Nmax)
+        xline(2*pi*an_modes(k));
+    end
 end
 
 %% Save

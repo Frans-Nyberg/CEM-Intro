@@ -1,6 +1,6 @@
 % From book of Anders Bondeson, Thomas Rylander, Pär Ingelström
 % in the 2005 version
-function [Et, Dt, c0] = Wave3D(Nt, Lx, Ly, Lz, Nx, Ny, Nz, s1, s2, s3)
+function [Et, Dt, c0] = Wave3D(Nt, Lx, Ly, Lz, Nx, Ny, Nz, s1, s2, s3, dt)
 % Physical constants
 eps0 = 8.8541878e-12; % Permittivity of vacuum
 mu0 = 4e-7 * pi; % Permeability of vacuum
@@ -9,7 +9,7 @@ c0 = 299792458; % Speed of light in vacuum
 Cx = Nx / Lx; % Inverse cell dimensions
 Cy = Ny / Ly; 
 Cz = Nz / Lz; 
-Dt = 1/(c0*norm([Cx Cy Cz])); % Time step
+Dt = dt; % Time step
 % Allocate field matrices
 Ex = zeros(Nx , Ny+1, Nz+1);
 Ey = zeros(Nx+1, Ny , Nz+1);

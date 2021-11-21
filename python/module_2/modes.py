@@ -1,4 +1,3 @@
-from pathlib import PosixPath
 import meep as mp
 from random import random, seed
 from enum import Enum
@@ -20,7 +19,6 @@ class Modes:
     sim = None
     # Cells
     cell = None
-
 
     def __init__(self, N, lam_res, Courant=0.5):
         # Time steps
