@@ -68,7 +68,7 @@ function test_fft(xm)
     s = fft(r)
     s = abs.(s)
     ons = 1 * (0:M-1)/M
-    fx = 0.5/dx * (0:half(M)-1)/half(M)
+    fx = 1/dx * (0:half(M)-1)/M
     c = ax.pcolor(ons, fx, s[1:half(M),:],
         shading="auto")
     return fig
@@ -94,8 +94,8 @@ function plot_spectrum(Er, R, labl)
     spectrum = fft(Er)  # multi-dimensional by default
     logabs = log10.(abs.(spectrum))
     # Axes
-    omega = pi/dtR(R) * (0:half(N)-1)/half(N)
-    k = pi/dx * (0:half(M)-1)/half(M)
+    omega = 2*pi/dtR(R) * (0:half(N)-1)/N
+    k = 2*pi/dx * (0:half(M)-1)/M
     # Plot
     c = ax.pcolor(omega, k, logabs[1:half(M),1:half(N)],
         vmin=-16, vmax=2, shading="nearest")
